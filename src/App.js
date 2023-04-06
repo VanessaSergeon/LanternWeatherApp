@@ -16,6 +16,8 @@ function App() {
         console.log(result)
         if (result.error) {
           setError(result.error.message)
+          setWeatherDay(null)
+          setWeatherHours(null)
         } else {
           setWeatherDay(result.forecast.forecastday[0].day)
           setWeatherHours(result.forecast.forecastday[0].hour)
