@@ -12,7 +12,7 @@ function App() {
     if (location) {
       setError(null);
       try {
-        let result = await (await fetch(`http://api.weatherapi.com/v1/forecast.json?key=f88e7bde4b5e4eb4b4f163032230604&q=${location}&days=1&aqi=no&alerts=no`)).json()
+        let result = await (await fetch(`https://api.weatherapi.com/v1/forecast.json?key=f88e7bde4b5e4eb4b4f163032230604&q=${location}&days=1&aqi=no&alerts=no`)).json()
         console.log(result)
         if (result.error) {
           setError(result.error.message)
