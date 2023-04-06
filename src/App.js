@@ -38,7 +38,7 @@ function App() {
       <div className="p-6 max-w-sm bg-white rounded-xl shadow-lg flex items-center py-1 my-2">
         <img src={data.condition.icon} />
         <div className='ml-6'>
-          {data.time ? <>{getTime(data.time)}</> : null}
+          {data.time ? <>Hour: {getTime(data.time)}</> : null}
           <div>{data.condition.text}</div>
           <div>Temp. {data.temp_f || data.avgtemp_f}F</div>
         </div>
