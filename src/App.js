@@ -6,7 +6,7 @@ function App() {
   const [weatherHours, setWeatherHours] = useState(null)
   const [error, setError] = useState(null)
   const [location, setLocation] = useState('London')
-  const [currentTab, setCurrentTab] = useState('day') // day, hour
+  const [currentTab, setCurrentTab] = useState('day') // day, hours
 
   const getWeather = async function() {
     if (location) {
@@ -33,20 +33,22 @@ function App() {
     }
 
     return (
-      <div>
-        {data.time ? <>{getTime(data.time)}</> : null}
-        <div>{data.condition.text}</div>
+      <div className="p-6 max-w-sm bg-white rounded-xl shadow-lg flex items-center py-1 my-2">
         <img src={data.condition.icon} />
-        <div>{data.avgtemp_f}</div>
+        <div className='ml-6'>
+          {data.time ? <>{getTime(data.time)}</> : null}
+          <div>{data.condition.text}</div>
+          <div>Temp. {data.temp_f || data.avgtemp_f}F</div>
+        </div>
       </div>
     )
   }
 
-  const dayDisplay = () => {
+  const dayTab = () => {
     return weatherDisplay(weatherDay)
   }
 
-  const hoursDisplay = () => {
+  const hoursTab = () => {
     return (
       <>
         {weatherHours.map((hour) => {
@@ -59,27 +61,46 @@ function App() {
   }
 
   const tabControls = () => {
+    let buttonStyles = (tab) => {
+      return `${tab !== currentTab ? 'bg-blue-300 p-2 rounded-sm mr-4' : 'bg-gray-200 p-2 rounded-sm mr-4'}`
+    }
+
     return (
-      <>
-        <button disabled={currentTab==='day'} onClick={() => {setCurrentTab('day')}}>Day</button>
-        <button disabled={currentTab==='hours'} onClick={() => {setCurrentTab('hours')}}>Hours</button>
-      </>
+      <div className='justify-around'>
+        <button className={buttonStyles('day')} disabled={currentTab==='day'} onClick={() => {setCurrentTab('day')}}>Day</button>
+        <button className={buttonStyles('hours')} disabled={currentTab==='hours'} onClick={() => {setCurrentTab('hours')}}>Hours</button>
+      </div>
+    )
+  }
+
+  const locationInput = () => {
+    return (
+      <div className="flex flex-row items-center my-2">
+        <label htmlFor="location" className="block text-sm font-medium leading-6 text-gray-900">
+          Location
+        </label>
+        <input
+            type="text"
+            name="location"
+            id="location"
+            className="block max-w-md rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            value={location} onChange={(e) => {setLocation(e.target.value)}} placeholder="Enter a location"
+          />
+        <button className='bg-green-100 p-2 rounded-sm' onClick={getWeather}>Enter</button>
+      </div>
     )
   }
 
   return (
-    <div className="App">
-      <p>Weather App</p>
-      <div>
-        <input value={location} onChange={(e) => {setLocation(e.target.value)}} placeholder="Enter a location"/>
-        <button onClick={getWeather}>enter</button>
-      </div>
+    <div className="flex flex-col max-w-md m-auto">
+      <p className="text-3xl font-bold underline my-2">Lantern Weather App</p>
+      {locationInput()}
       {error ? <div>{error}</div> : null}
       {weatherDay && weatherHours ?
         <div>
           {tabControls()}
-          {currentTab === 'day' ? dayDisplay() : null}
-          {currentTab === 'hours' ? hoursDisplay() : null}
+          {currentTab === 'day' ? dayTab() : null}
+          {currentTab === 'hours' ? hoursTab() : null}
         </div>
       : null}
     </div>
@@ -90,14 +111,11 @@ export default App;
 
 /**
  * TODO:
- * 
- * Tabs for each data type
  * Tests
- * Styles
- * Semantic HTML
  * 
- * Nice to haves:
+ * Next steps:
  * toggle f/c
  * expand other weather conditions
  * Debounce on input
+ * Semantic HTML
  */
